@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keju Showroom - 100+ Premium Vehicles</title>
+    <style>
+        /* --- Premium Dark Theme CSS --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            padding-bottom: 50px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: #1a1a1a;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #2a2a2a;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ff3838;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 15px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: #aaaaaa;
+            border: 2px solid #333;
+            padding: 10px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            border-color: #ff3838;
+        }
+
+        .tab-btn.active {
+            background-color: #ff3838;
+            color: #fff;
+            border-color: #ff3838;
+            box-shadow: 0 0 15px rgba(255, 56, 56, 0.4);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        /* Product Grid & Cards */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background-color: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            border-color: #444;
+        }
+
+        /* Vehicle Image Placeholder */
+        .image-box {
+            height: 180px;
+            background: linear-gradient(135deg, #222, #333);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            padding: 10px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .vehicle-title {
+            font-size: 20px;
+            margin-bottom: 6px;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .vehicle-color-text {
+            font-size: 13px;
+            color: #ff3838;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .price {
+            font-size: 18px;
+            color: #00ff88;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .desc {
+            font-size: 13px;
+            color: #aaaaaa;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            height: 38px;
+            overflow: hidden;
+        }
+
+        /* Color Circles */
+        .color-section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #777;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 10px;
+        }
+
+        .color-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .color-circle:hover {
+            transform: scale(1.15);
+        }
+
+        .color-circle.selected {
+            border-color: #ffffff;
+            transform: scale(1.1);
+        }
+
+        /* Counter badge for fun */
+        .count-badge {
+            font-size: 14px;
+            color: #888;
+            text-align: center;
+            margin-top: -20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Keju Showroom</div>
+        <div class="nav-tabs">
+            <button class="tab-btn active" id="btn-bikes" onclick="renderCategory('bikes')">Bikes (50)</button>
+            <button class="tab-btn" id="btn-cars" onclick="renderCategory('cars')">Cars (50)</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2 class="section-title" id="main-title">Premium Bikes Collection</h2>
+        <div class="count-badge" id="count-text">Showing 50 premium models</div>
+        
+        <div class="product-grid" id="showroom-grid"></div>
+    </div>
+
+    <script>
+        // --- VEHICLE DATABASE (50 Bikes & 50 Cars) ---
+        const vehiclesData = {
+            bikes: [],
+            cars: []
+        };
+
+        // Automatically generating 50 Premium Bikes data
+        const bikeNames = [
+            "HyperSport", "Cruiser X", "Stealth Rider", "Thunderbolt", "Apex Predator", 
+            "Shadow Fast", "Falcon GT", "Viper Z", "Neon Cruise", "Rogue 350", 
+            "Quantum", "Tracker Pro", "Interceptor", "Scrambler K", "Bullet X", 
+            "Giga Glide", "Carbon Ghost", "Rebel Sport", "Nomad Touring", "Outlaw V", 
+            "Vector 250", "Blaze", "Stryker", "Phoenix", "Titan Cruiser", 
+            "Storm Bringer", "Raptor E", "Maverick", "Alpha Street", "Omega Race", 
+            "Cyclo Jet", "Razor Edge", "Phantom", "Tornado S", "Vortex", 
+            "Valiant", "Ronin 600", "Samurai Tour", "Shogun X", "Ninja Strike", 
+            "Talon Pro", "Specter", "Wrangler Moto", "Desperado", "Bandit", 
+            "Hydra", "Zeus Power", "Ares Street", "Hermes Flyer", "Keju Beast Pro"
+        ];
+
+        // Automatically generating 50 Premium Cars data
+        const carNames = [
+            "Apex GT", "Horizon SUV", "Phantom Sedan", "Enigma Electric", "Vanguard", 
+            "Velocity Sport", "Matrix Hatch", "Spectra Luxury", "Titan Truck", "Aero Coupe", 
+            "Monarch", "Nebula EV", "Eclipse GT", "Cruiser XL", "Cyber Roadster", 
+            "Paladin", "Genesis", "Overdrive", "Quantum Drive", "Signature Sedan", 
+            "Interceptor SUV", "Stealth Coupe", "Aurora", "Solstice", "Zenith", 
+            "Raptor Truck", "Avenger", "Maverick GT", "Dynasty Luxury", "Iconic EV", 
+            "Legacy", "Prophecy", "Stargazer", "Chronos", "Viper Race", 
+            "追求 Zhui Qiu", "Ascent SUV", "Terran 4x4", "Voyager", "Ventura", 
+            "Goliath", "Insignia", "Predator GT", "Stratosphere", "Caliber", 
+            "Renegade", "Command XL", "Noble Sedan", "Prestige E", "Keju Ultimate Hypercar"
+        ];
+
+        // Fill Bikes array dynamically
+        for (let i = 1; i <= 50; i++) {
+            let basePrice = 120000 + (i * 7500); // Har bike ka price alag hoga
+            vehiclesData.bikes.push({
+                id: `bike-${i}`,
+                name: `${bikeNames[i-1]} ${i*10}cc`,
+                price: `₹ ${basePrice.toLocaleString('en-IN')}`,
+                desc: `High performance premium machine with advanced ${i*5}kW cooling system and traction control.`,
+                colors: [
+                    { name: "Neon Red", hex: "#ff3838" },
+                    { name: "Cyan Blue", hex: "#00d2d3" },
+                    { name: "Matte Black", hex: "#1d1d1d" }
+                ]
+            });
+        }
+
+        // Fill Cars array dynamically
+        for (let i = 1; i <= 50; i++) {
+            let basePrice = 850000 + (i * 85000); // Har car ka price alag hoga
+            vehiclesData.cars.push({
+                id: `car-${i}`,
+                name: `${carNames[i-1]} v${i}`,
+                price: `₹ ${basePrice.toLocaleString('en-IN')}`,
+                desc: `Luxury dynamic vehicle with state-of-the-art AI cabin, automatic transmission, and premium drive layout.`,
+                colors: [
+                    { name: "Metallic Gold", hex: "#ffd32a" },
+                    { name: "Electric Blue", hex: "#3c40c6" },
+                    { name: "Satin Silver", hex: "#d2dae2" }
+                ]
+            });
+        }
+
+
+        // --- RENDERING LOGIC (Displaying Cards) ---
+        function renderCategory(category) {
+            const grid = document.getElementById('showroom-grid');
+            const mainTitle = document.getElementById('main-title');
+            
+            // Tab highlight switch
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            if(category === 'bikes') {
+                document.getElementById('btn-bikes').classList.add('active');
+                mainTitle.innerText = "Premium Bikes Collection";
+            } else {
+                document.getElementById('btn-cars').classList.add('active');
+                mainTitle.innerText = "Luxury Cars Collection";
+            }
+
+            // Clear previous grid items
+            grid.innerHTML = "";
+
+            // Get items array (50 items)
+            const items = vehiclesData[category];
+
+            // Create cards loop
+            items.forEach(item => {
+                const defaultColor = item.colors[0];
+                
+                // HTML structure for card
+                const cardHTML = `
+                    <div class="card" id="${item.id}">
+                        <div class="image-box" id="${item.id}-img">${defaultColor.name} Edition</div>
+                        <div class="card-body">
+                            <h3 class="vehicle-title">${item.name}</h3>
+                            <div class="vehicle-color-text" id="${item.id}-color">Color: ${defaultColor.name}</div>
+                            <div class="price">${item.price}</div>
+                            <p class="desc">${item.desc}</p>
+                            <div class="color-section-title">Select Color</div>
+                            <div class="color-palette">
+                                ${item.colors.map((col, index) => `
+                                    <div class="color-circle ${index === 0 ? 'selected' : ''}" 
+                                         style="background-color: ${col.hex};" 
+                                         onclick="updateCardColor('${item.id}', '${col.name}', this)">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        // --- LIVE COLOR CHANGER FUNCTION ---
+        function updateCardColor(cardId, colorName, element) {
+            // Text changes
+            document.getElementById(`${cardId}-color`).innerText = `Color: ${colorName}`;
+            document.getElementById(`${cardId}-img`).innerText = `${colorName} Edition`;
+
+            // Active ring change
+            const circles = element.parentElement.querySelectorAll('.color-circle');
+            circles.forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        // Initially load bikes on page startup
+        window.onload = function() {
+            renderCategory('bikes');
+        };
+    </script>
+</body>
+</html>
